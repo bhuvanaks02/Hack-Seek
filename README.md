@@ -1,6 +1,6 @@
 # Hack-Seek
 HackSeek is a full-stack web application that helps developers discover hackathons worldwide through intelligent filtering and AI-powered chatbot assistance. Find hackathons that match your location, date preferences, skill level, and interests.
-## 🌟 Features
+##  Features
 
 ### Core Features
 - **Smart Search**: Filter hackathons by location, date, prize money, and themes
@@ -19,7 +19,7 @@ HackSeek is a full-stack web application that helps developers discover hackatho
 
 
 
-## 🏗️ Architecture
+##  Architecture
 
 **Frontend**: Next.js + React + TypeScript  
 **Backend**: Python FastAPI + PostgreSQL  
@@ -29,7 +29,7 @@ HackSeek is a full-stack web application that helps developers discover hackatho
 
 
 
-## 📁 Project Structure
+##  Project Structure
 
 hackseek/
 ├── frontend/                
@@ -113,3 +113,40 @@ npm run dev
 # Install PostgreSQL and create database
 # Run migrations from database/migrations/
 ```
+
+## Environment Variables
+
+Copy `.env.example` to `.env` and configure:
+
+### AI API Configuration (Fallback Strategy)
+- **GROQ_API_KEY**: Primary AI API (14,400 free requests/day)
+- **OLLAMA_ENDPOINT**: Local AI fallback (http://localhost:11434) - for development/testing
+- **CLAUDE_API_KEY**: Production fallback when website goes public
+- **OPENAI_API_KEY**: Final fallback for public deployment
+
+### Database & Services
+- **DATABASE_URL**: PostgreSQL connection string
+- **TWITTER_BEARER_TOKEN**: For social media scraping
+- **SMTP_HOST**: Email server (e.g., smtp.gmail.com)
+- **SMTP_PORT**: Email port (587 for Gmail)
+- **SMTP_USER**: Email username
+- **SMTP_PASSWORD**: Email app password
+
+### API Fallback Flow
+1. **Development**: Groq → Ollama (local)
+2. **Production**: Groq → Claude/OpenAI (when public)
+
+
+
+##  Contributing
+
+This is a personal learning project, but suggestions and feedback are welcome!
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+##  License
+
+MIT License - see LICENSE file for details
