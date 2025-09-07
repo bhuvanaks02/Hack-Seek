@@ -9,3 +9,64 @@ HackSeek is a full-stack web application that helps developers discover hackatho
 - **Real-time Updates**: Automated scraping keeps data fresh
 - **Calendar Integration**: Export hackathons to Google Calendar
 
+
+
+### Data Sources
+- **Hackathon Platforms**: Devpost, Unstop, Devfolio, MLH, HackerEarth
+- **Event Platforms**: Luma, Eventbrite, Meetup
+- **Social Media**: Twitter/X hackathon announcements
+- **Tech Communities**: Reddit, Discord, Slack communities
+
+
+
+## 🏗️ Architecture
+
+**Frontend**: Next.js + React + TypeScript  
+**Backend**: Python FastAPI + PostgreSQL  
+**AI**: Claude API with local model fallback  
+**Scraping**: Python + BeautifulSoup/selenium + Scrapy  
+**Deployment**: Docker containers
+
+
+
+## 📁 Project Structure
+
+hackseek/
+├── frontend/                
+│   ├── src/
+│   │   ├── components/       
+│   │   ├── pages/        
+│   │   ├── hooks/     
+│   │   ├── utils/         
+│   │   └── styles/         
+│   ├── public/            
+│   └── package.json
+│
+├── backend/                
+│   ├── app/
+│   │   ├── api/       
+│   │   ├── models/      
+│   │   ├── services/     
+│   │   ├── utils/          
+│   │   └── main.py        
+│   ├── tests/             
+│   └── requirements.txt
+│
+├── scraper/                
+│   ├── scrapers/       
+│   │   ├── devpost.py
+│   │   ├── unstop.py
+│   │   ├── mlh.py
+│   │   └── social_media.py
+│   ├── utils/            
+│   ├── scheduler.py      
+│   └── main.py           
+│
+├── database/              
+│   ├── migrations/       
+│   ├── schemas/        
+│   └── init.sql          # Initial database setup
+│
+├── docker-compose.yml    
+├── .env.example         
+└── README.md     
