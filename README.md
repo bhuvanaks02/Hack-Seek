@@ -70,3 +70,46 @@ hackseek/
 ├── docker-compose.yml    
 ├── .env.example         
 └── README.md     
+
+
+
+### Prerequisites
+- Docker & Docker Compose
+- Git
+
+### Development Setup
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd hackseek
+
+# Copy environment file
+cp .env.example .env
+# Edit .env with your API keys
+
+# Start all services
+docker-compose up -d
+
+# Access the application
+# Frontend: http://localhost:3000
+# Backend: http://localhost:8000
+# Database: localhost:5432
+```
+
+
+### Manual Setup (without Docker)
+```bash
+# Backend setup
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+
+# Frontend setup
+cd frontend
+npm install
+npm run dev
+
+# Database setup
+# Install PostgreSQL and create database
+# Run migrations from database/migrations/
+```
