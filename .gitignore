@@ -262,3 +262,17 @@ htmlcov/
 # Optional eslint cache
 .eslintcache
 
+# Docker specific files
+# Keep Dockerfiles but ignore build artifacts and volumes
+docker-compose.override.yml
+postgres_data/
+postgres_prod_data/
+redis_data/
+redis_prod_data/
+
+# SSL certificates and nginx secrets
+nginx/ssl/
+nginx/*.key
+nginx/*.crt
+nginx/*.pem
+
