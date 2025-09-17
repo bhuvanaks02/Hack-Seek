@@ -119,7 +119,8 @@ npm run dev
 Copy `.env.example` to `.env` and configure:
 
 ### AI API Configuration (Fallback Strategy)
-- **GROQ_API_KEY**: Primary AI API (14,400 free requests/day)
+- **GEMINI_API_KEY**: Primary AI API
+- **GROQ_API_KEY**: Secondary fallback AI API (14,400 free requests/day)
 - **OLLAMA_ENDPOINT**: Local AI fallback (http://localhost:11434) - for development/testing
 - **CLAUDE_API_KEY**: Production fallback when website goes public
 - **OPENAI_API_KEY**: Final fallback for public deployment
@@ -133,8 +134,8 @@ Copy `.env.example` to `.env` and configure:
 - **SMTP_PASSWORD**: Email app password
 
 ### API Fallback Flow
-1. **Development**: Groq → Ollama (local)
-2. **Production**: Groq → Claude/OpenAI (when public)
+1. **Development**: Gemini → Groq → Ollama (local)
+2. **Production**: Gemini → Groq → Claude/OpenAI (when public)
 
 
 
