@@ -1,0 +1,75 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug FastAPI Backend",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/app/main.py",
+      "module": "uvicorn",
+      "args": [
+        "app.main:app",
+        "--host", "0.0.0.0",
+        "--port", "8000",
+        "--reload"
+      ],
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/backend"
+      },
+      "cwd": "${workspaceFolder}/backend",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Debug Next.js Frontend",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/frontend/node_modules/.bin/next",
+      "args": ["dev"],
+      "cwd": "${workspaceFolder}/frontend",
+      "console": "integratedTerminal",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    {
+      "name": "Debug Python Tests",
+      "type": "python",
+      "request": "launch",
+      "module": "pytest",
+      "args": [
+        "${workspaceFolder}/backend/tests",
+        "-v"
+      ],
+      "cwd": "${workspaceFolder}/backend",
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/backend"
+      }
+    },
+    {
+      "name": "Debug Scrapers",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/scraper/main.py",
+      "cwd": "${workspaceFolder}/scraper",
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/scraper"
+      }
+    },
+    {
+      "name": "Attach to Docker Backend",
+      "type": "python",
+      "request": "attach",
+      "host": "localhost",
+      "port": 5678,
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/backend",
+          "remoteRoot": "/app"
+        }
+      ]
+    }
+  ]
+}

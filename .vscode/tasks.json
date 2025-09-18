@@ -1,0 +1,129 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Development Environment",
+      "type": "shell",
+      "command": "docker-compose",
+      "args": ["-f", "docker-compose.dev.yml", "up", "-d"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Stop Development Environment",
+      "type": "shell",
+      "command": "docker-compose",
+      "args": ["-f", "docker-compose.dev.yml", "down"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Backend: Install Dependencies",
+      "type": "shell",
+      "command": "pip",
+      "args": ["install", "-r", "requirements.txt"],
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Frontend: Install Dependencies",
+      "type": "shell",
+      "command": "npm",
+      "args": ["install"],
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Backend: Run Tests",
+      "type": "shell",
+      "command": "pytest",
+      "args": ["-v"],
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Frontend: Run Tests",
+      "type": "shell",
+      "command": "npm",
+      "args": ["test"],
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Backend: Format Code",
+      "type": "shell",
+      "command": "black",
+      "args": ["."],
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Frontend: Format Code",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "lint", "--", "--fix"],
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    }
+  ]
+}

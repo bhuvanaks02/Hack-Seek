@@ -1,0 +1,54 @@
+{
+  "python.defaultInterpreterPath": "./backend/venv/bin/python",
+  "python.terminal.activateEnvironment": true,
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": true,
+  "python.linting.mypyEnabled": true,
+  "python.formatting.provider": "black",
+  "python.formatting.blackPath": "./backend/venv/bin/black",
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestPath": "./backend/venv/bin/pytest",
+  "python.testing.pytestArgs": ["./backend/tests"],
+
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.suggest.autoImports": true,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true,
+    "source.fixAll.eslint": true
+  },
+
+  "eslint.workingDirectories": ["frontend"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/venv": true,
+    "**/.next": true,
+    "**/dist": true,
+    "**/.mypy_cache": true
+  },
+
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/__pycache__": true,
+    "**/venv": true,
+    "**/.git": true,
+    "**/.next": true
+  },
+
+  "emmet.includeLanguages": {
+    "typescript": "html",
+    "typescriptreact": "html"
+  },
+
+  "docker.attachShellCommand.linuxContainer": "/bin/bash",
+  "docker.attachShellCommand.windowsContainer": "powershell"
+}

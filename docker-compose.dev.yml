@@ -1,0 +1,126 @@
+version: '3.8'
+
+services:
+  # Database with development settings
+  postgres:
+    image: postgres:15-alpine
+    container_name: hackseek_postgres_dev
+    environment:
+      POSTGRES_DB: hackseek_dev
+      POSTGRES_USER: hackseek_user
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-dev_password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database/dev-seed.sql:/docker-entrypoint-initdb.d/dev-seed.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hackseek_user -d hackseek_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching and session storage
+  redis:
+    image: redis:7-alpine
+    container_name: hackseek_redis_dev
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_dev_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API with hot reloading
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hackseek_backend_dev
+    environment:
+      - DATABASE_URL=postgresql://hackseek_user:${DATABASE_PASSWORD:-dev_password}@postgres:5432/hackseek_dev
+      - REDIS_URL=redis://redis:6379/0
+      - DEBUG=true
+      - PYTHONPATH=/app
+    ports:
+      - "8000:8000"
+      - "5678:5678"  # Debug port
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - /app/__pycache__
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --log-level debug
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend with hot reloading
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: hackseek_frontend_dev
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    command: npm run dev
+
+  # Web scraper service (disabled by default in dev)
+  scraper:
+    build:
+      context: ./scraper
+      dockerfile: Dockerfile
+    container_name: hackseek_scraper_dev
+    environment:
+      - DATABASE_URL=postgresql://hackseek_user:${DATABASE_PASSWORD:-dev_password}@postgres:5432/hackseek_dev
+      - REDIS_URL=redis://redis:6379/0
+      - DEBUG=true
+      - SCRAPING_DELAY=5  # Slower scraping in dev
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./scraper:/app
+    profiles:
+      - scraper  # Only start with --profile scraper
+    command: python main.py
+
+  # Development database admin
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: hackseek_pgadmin_dev
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@hackseek.dev
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    profiles:
+      - admin  # Only start with --profile admin
+
+volumes:
+  postgres_dev_data:
+  redis_dev_data:
