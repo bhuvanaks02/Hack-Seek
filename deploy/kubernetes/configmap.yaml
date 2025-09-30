@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hackseek-config
+  namespace: hackseek
+data:
+  # Database configuration
+  DATABASE_HOST: "postgres-service"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "hackseek_prod"
+  DATABASE_USER: "hackseek_user"
+
+  # Redis configuration
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+
+  # Application configuration
+  API_BASE_URL: "https://api.hackseek.app"
+  FRONTEND_URL: "https://hackseek.app"
+  CORS_ORIGINS: "https://hackseek.app,https://www.hackseek.app"
+
+  # Performance settings
+  WORKERS: "4"
+  MAX_CONNECTIONS: "1000"
+  DATABASE_POOL_SIZE: "20"
+  DATABASE_MAX_OVERFLOW: "30"
+
+  # Logging
+  LOG_LEVEL: "INFO"
+
+  # Rate limiting
+  RATE_LIMIT_PER_MINUTE: "100"
+
+  # Cache settings
+  CACHE_TTL: "3600"

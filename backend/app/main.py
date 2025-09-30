@@ -11,7 +11,11 @@ from fastapi.responses import JSONResponse
 
 from .config import settings
 from .middleware.error_handling import ErrorHandlingMiddleware, RequestLoggingMiddleware
+from .middleware.monitoring import MonitoringMiddleware, HealthMetrics, setup_sentry_monitoring
 from .utils.logger import setup_logging, get_logger
+from .database import init_db, close_db
+from .api.auth import router as auth_router
+from .api.hackathons import router as hackathons_router
 
 # Initialize logging
 setup_logging(
@@ -40,11 +44,16 @@ app.add_middleware(
 )
 
 # Add custom middleware
+app.add_middleware(MonitoringMiddleware, logger=logger)
 app.add_middleware(ErrorHandlingMiddleware)
 app.add_middleware(RequestLoggingMiddleware)
 
 # Store settings in app state
 app.state.settings = settings
+
+# Include routers
+app.include_router(auth_router, prefix="/api")
+app.include_router(hackathons_router, prefix="/api")
 
 
 @app.on_event("startup")
@@ -54,11 +63,24 @@ async def startup_event():
     logger.info(f"Debug mode: {settings.debug}")
     logger.info(f"Database URL: {settings.database_url[:50]}...")
 
+    # Setup Sentry monitoring
+    if hasattr(settings, 'sentry_dsn') and settings.sentry_dsn:
+        setup_sentry_monitoring(settings.sentry_dsn)
+        logger.info("Sentry monitoring initialized")
+
+    # Initialize database
+    await init_db()
+    logger.info("Database initialized")
+
 
 @app.on_event("shutdown")
 async def shutdown_event():
     """Perform cleanup tasks."""
     logger.info("Shutting down HackSeek API server...")
+
+    # Close database connections
+    await close_db()
+    logger.info("Database connections closed")
 
 
 @app.get("/", include_in_schema=False)
@@ -89,7 +111,8 @@ async def health_check():
         "timestamp": datetime.utcnow().isoformat(),
         "uptime": time.time() - app.state.start_time if hasattr(app.state, 'start_time') else 0,
         "environment": "development" if settings.debug else "production",
-        "services": {}
+        "services": {},
+        "system": HealthMetrics.get_system_metrics()
     }
 
     # Check database connectivity

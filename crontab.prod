@@ -1,0 +1,20 @@
+# HackSeek Production Crontab
+# Install with: crontab crontab.prod
+
+# Database backup - Daily at 2:00 AM
+0 2 * * * /usr/bin/python3 /app/backend/scripts/backup_db.py backup >> /var/log/hackseek/backup.log 2>&1
+
+# Cleanup old backups - Weekly on Sunday at 3:00 AM
+0 3 * * 0 /usr/bin/python3 /app/backend/scripts/backup_db.py cleanup >> /var/log/hackseek/backup.log 2>&1
+
+# Run web scraper - Every 4 hours
+0 */4 * * * /usr/bin/python3 /app/scraper/main.py >> /var/log/hackseek/scraper.log 2>&1
+
+# Health check logs cleanup - Daily at 1:00 AM
+0 1 * * * find /var/log/nginx -name "*.log" -mtime +30 -delete
+
+# Application logs cleanup - Weekly on Monday at 1:30 AM
+30 1 * * 1 find /var/log/hackseek -name "*.log" -mtime +7 -delete
+
+# Generate weekly analytics report - Sunday at 23:00
+0 23 * * 0 /usr/bin/python3 /app/backend/scripts/generate_analytics.py >> /var/log/hackseek/analytics.log 2>&1
